@@ -8,7 +8,19 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+
+// Enable CORS for all origins & explicitly handle Preflight (OPTIONS) requests
+app.use(
+  cors({
+    origin: "*", // Allows any origin (or replace with your specific Netlify URL)
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// Explicitly answer HTTP OPTIONS preflight requests before hitting routes
+app.options("*", cors());
+
 app.use(express.json());
 
 // Import Routes
@@ -23,7 +35,7 @@ app.get("/api/health", (req, res) =>
     status: "ok",
     database:
       mongoose.connection.readyState === 1 ? "connected" : "disconnected",
-  }),
+  })
 );
 
 // Root route
