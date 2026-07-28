@@ -26,5 +26,10 @@ app.get("/api/health", (req, res) =>
   }),
 );
 
+// Root route
+app.get("/", (req, res) => {
+  res.json({ message: "Locanta API is running", health: "/api/health" });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
